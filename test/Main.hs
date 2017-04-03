@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP             #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies    #-}
 module Main
@@ -65,8 +66,8 @@ tests = testGroup "safecopy-hunit"
   , testCase "can fail on missing versions" $ withVersionGaps $ \tmpDir -> do
       res <- try (testSafeCopy FailMissingFiles (tmpDir </> $(mkRelFile "TrivialRecord")) trivialRecord)
       let expectedMsg = "Missing files for the following versions: 1"
-      case res of
-        Left (HU.HUnitFailure _ (HU.Reason actualMsg)) -> assertEqual "" expectedMsg actualMsg
+      case fmapL getReason res of
+        Left (Just actualMsg) -> assertEqual "" expectedMsg actualMsg
         _ -> assertFailure ("Expected failure reason of \"" ++ expectedMsg ++ "\" but got " ++ show res)
   , testCase "can fail on safecopy errors" $ withTempFiles [
         $(mkRelFile "TrivialRecord.0")
@@ -76,8 +77,8 @@ tests = testGroup "safecopy-hunit"
       writeFile (toFilePath badFile) "corrupted"
       res <- try (testSafeCopy FailMissingFiles (tmpDir </> $(mkRelFile "TrivialRecord")) trivialRecord)
       let pfx = "SafeCopy error in " ++ toFilePath badFile ++ ":"
-      case res of
-        Left (HU.HUnitFailure _ (HU.Reason actualMsg))
+      case fmapL getReason res of
+        Left (Just actualMsg)
           | pfx `isPrefixOf` actualMsg -> return ()
         _ -> assertFailure ("Expected failure starting with \"" ++ pfx ++ "\" but got " ++ show res)
   ]
@@ -91,3 +92,17 @@ tests = testGroup "safecopy-hunit"
       [ $(mkRelFile "TrivialRecord.0")
       , $(mkRelFile "TrivialRecord.2")
       ]
+
+
+getReason :: HU.HUnitFailure -> Maybe String
+#if MIN_VERSION_HUnit(1,5,0)
+getReason (HU.HUnitFailure _ r) = case r of
+  HU.Reason s -> Just s
+  _        -> Nothing
+#else
+getReason (HU.HUnitFailure _ s) = Just s
+#endif
+
+fmapL :: (a -> c) -> Either a b -> Either c b
+fmapL f (Left x) = Left (f x)
+fmapL _ (Right x) = Right x

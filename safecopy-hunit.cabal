@@ -2,7 +2,7 @@ name:                safecopy-hunit
 version:             0.1.0.0
 synopsis:            Testing file compatibility of safecopy values
 -- description:
-homepage:            https://github.com/githubuser/safecopy-hunit#readme
+homepage:            https://github.com/Soostone/safecopy-hunit#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Michael Xavier
@@ -21,7 +21,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Test.HUnit.SafeCopy
   build-depends:       base >= 4.6 && < 5
-                     , safecopy
+                     , safecopy >= 0.9.1
                      , HUnit
                      , path
                      , path-io
