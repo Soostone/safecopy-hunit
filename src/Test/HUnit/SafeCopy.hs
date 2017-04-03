@@ -2,8 +2,6 @@
 module Test.HUnit.SafeCopy
     ( testSafeCopy
     , MissingFilesPolicy(..)
-    --TODO: drop exporrt
-    , SafeCopyFile(..)
     ) where
 
 
@@ -70,7 +68,6 @@ testSafeCopy missingFilesPolicy baseFile a = do
     assertLatest f = do
       dumpVersionUnlessExists f a
       assertFile f a
-
 
 
 -------------------------------------------------------------------------------

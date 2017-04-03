@@ -1,7 +1,7 @@
 name:                safecopy-hunit
 version:             0.1.0.0
 synopsis:            Testing file compatibility of safecopy values
--- description:
+description:         Please see README.md
 homepage:            https://github.com/Soostone/safecopy-hunit#readme
 license:             BSD3
 license-file:        LICENSE
