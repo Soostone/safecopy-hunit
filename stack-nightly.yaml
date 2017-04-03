@@ -1,0 +1,9 @@
+resolver: nightly-2017-04-02
+packages:
+- '.'
+extra-deps:
+- safecopy-0.9.3.1
+flags:
+  safecopy-hunit:
+    lib-Werror: true
+extra-package-dbs: []

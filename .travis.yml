@@ -17,7 +17,7 @@ matrix:
     - env: ARGS="--resolver=lts-6"
     - env: ARGS="--resolver=lts-7"
     - env: ARGS="--resolver=lts-8"
-    - env: ARGS="--resolver=nightly"
+    - env: ARGS="--stack-yaml=stack-nightly.yaml"
 
 before_install:
 # Download and unpack the stack executable
